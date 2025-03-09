@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Box,
@@ -37,6 +37,7 @@ const Navbar = () => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const navigate = useNavigate(); // Add useNavigate hook
 
   useEffect(() => {
     const handleScroll = () => {
@@ -60,6 +61,11 @@ const Navbar = () => {
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
+  };
+
+  // Add the handleGetStarted function
+  const handleGetStarted = () => {
+    navigate('/signup');
   };
 
   const navItems = ['Home', 'About', 'Solutions', 'Contact'];
@@ -146,10 +152,11 @@ const Navbar = () => {
                     <Typography textAlign="center" sx={{ color: 'white' }}>{page}</Typography>
                   </MenuItem>
                 ))}
-                <MenuItem>
+                <MenuItem onClick={handleCloseNavMenu}>
                   <Button
                     fullWidth
                     variant="contained"
+                    onClick={handleGetStarted}
                     sx={{ 
                       borderRadius: 28,
                       background: 'linear-gradient(45deg, #8A2BE2 30%, #7B68EE 90%)',
@@ -217,6 +224,7 @@ const Navbar = () => {
                     transform: 'translateY(-2px)'
                   }
                 }}
+                onClick={handleGetStarted}
               >
                 Get Started
               </Button>

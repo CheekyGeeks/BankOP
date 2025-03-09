@@ -1,7 +1,14 @@
 import React from 'react';
 import { Box, Container, Grid, Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+  
+  const handleGetStarted = () => {
+    navigate('/signup');
+  };
+
   return (
     <Box
       sx={{
@@ -163,6 +170,7 @@ const HeroSection = () => {
                     transform: 'translateY(-3px)'
                   }
                 }}
+                onClick={handleGetStarted}
               >
                 Get Started
               </Button>

@@ -1,10 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Navbar from './components/Navbar';
-import HomePage from './pages/HomePage';
+import SignUpPage from './pages/SignUpPage';
 import Footer from './components/Footer';
+import HomePage from './pages/HomePage';
 
 const theme = createTheme({
   palette: {
@@ -59,9 +59,10 @@ function App() {
           backgroundImage: 'radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.2) 0%, transparent 20%)',
           minHeight: '100vh',
         }}>
-          <Navbar />
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="*" element={<Navigate to="/signup" replace />} />
           </Routes>
           <Footer />
         </div>
