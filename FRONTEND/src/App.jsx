@@ -1,35 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Navbar from './components/Navbar';
+import HomePage from './pages/HomePage';
+import Footer from './components/Footer';
+
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#8A2BE2', // Purple
+      light: '#A29BFE',
+    },
+    secondary: {
+      main: '#7B68EE', // Medium slate blue
+    },
+    background: {
+      default: '#0F172A', // Dark navy
+      paper: '#1E293B',  // Slightly lighter navy
+    },
+    text: {
+      primary: '#FFFFFF',
+      secondary: 'rgba(255, 255, 255, 0.7)',
+    },
+  },
+  typography: {
+    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    h1: {
+      fontWeight: 700,
+    },
+    h2: {
+      fontWeight: 700,
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 28,
+          textTransform: 'none',
+        },
+        containedPrimary: {
+          background: 'linear-gradient(90deg, #8A2BE2 0%, #7B68EE 100%)',
+        },
+      },
+    },
+  },
+});
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <div className="app" style={{ 
+          background: '#0F172A',
+          backgroundImage: 'radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.2) 0%, transparent 20%)',
+          minHeight: '100vh',
+        }}>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+          </Routes>
+          <Footer />
+        </div>
+      </Router>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;
