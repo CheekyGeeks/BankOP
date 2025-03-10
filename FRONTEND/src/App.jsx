@@ -6,6 +6,7 @@ import SignUpPage from './pages/SignUpPage';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import SignInPage from './pages/SignIn';
+import Dashboard from './pages/Dashboard';
 
 const theme = createTheme({
   palette: {
@@ -59,17 +60,20 @@ function App() {
           background: '#0F172A',
           backgroundImage: 'radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.2) 0%, transparent 20%)',
           minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
         }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/signin" element={<SignInPage/>} />
+            <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
-            <Route path="*" element={<Navigate to="/signup" replace />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
           <Footer />
         </div>
       </Router>
-    </ThemeProvider>
+    </ThemeProvider>  
   );
 }
 
