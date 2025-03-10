@@ -1,0 +1,8 @@
+from flask import Flask, request, jsonify
+import cv2
+import base64
+import face_recognition
+import dlib
+import numpy as np
+from scipy.spatial import distance
+import os
