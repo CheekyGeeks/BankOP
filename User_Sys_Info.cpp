@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
 #include <sstream>
 #include <cstdlib>
 #include <array>
@@ -134,23 +133,30 @@ std::string get_gateway() {
 #endif
 }
 
-void save_to_json(const std::string& filename, const std::string& json_data) {
-    std::ofstream file(filename);
-    file << json_data;
-    file.close();
+// ✅ New function that returns JSON
+std::string get_system_info_json() {
+    std::ostringstream json_output;
+    json_output << "{\n";
+    json_output << "  \"MAC Address\": \"" << get_mac_address() << "\",\n";
+    json_output << "  \"Local IP Address\": \"" << get_local_ip() << "\",\n";
+    json_output << "  \"Public IP Address\": \"" << get_public_ip() << "\",\n";
+    json_output << "  \"Serial Number\": \"" << get_serial_number() << "\",\n";
+    json_output << "  \"BIOS UUID\": \"" << get_bios_uuid() << "\",\n";
+    json_output << "  \"Gateway Interface\": \"" << get_gateway() << "\"\n";
+    json_output << "}";
+
+    return json_output.str();
 }
 
+// ✅ Modify main() to use the function
 int main() {
-    std::string json_output = "{\n";
-    json_output += "  \"MAC Address\": \"" + get_mac_address() + "\",\n";
-    json_output += "  \"Local IP Address\": \"" + get_local_ip() + "\",\n";
-    json_output += "  \"Public IP Address\": \"" + get_public_ip() + "\",\n";
-    json_output += "  \"Serial Number\": \"" + get_serial_number() + "\",\n";
-    json_output += "  \"BIOS UUID\": \"" + get_bios_uuid() + "\",\n";
-    json_output += "  \"Gateway Interface\": \"" + get_gateway() + "\"\n";
-    json_output += "}";
+    std::string json_data = get_system_info_json();
+    std::cout << json_data << std::endl;
 
-    std::cout << json_output << std::endl;
-    save_to_json("system_info.json", json_output);
+    // Save to a file (optional)
+    std::ofstream file("system_info.json");
+    file << json_data;
+    file.close();
+
     return 0;
 }
