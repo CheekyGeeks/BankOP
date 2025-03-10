@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import SignUpPage from './pages/SignUpPage';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
+import SignInPage from './pages/SignIn';
 
 const theme = createTheme({
   palette: {
@@ -61,6 +62,7 @@ function App() {
         }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/signin" element={<SignInPage/>} />
             <Route path="/signup" element={<SignUpPage />} />
             <Route path="*" element={<Navigate to="/signup" replace />} />
           </Routes>
