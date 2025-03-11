@@ -41,7 +41,7 @@ predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 LEFT_EYE_IDX = list(range(36, 42))
 RIGHT_EYE_IDX = list(range(42, 48))
 
-@app.route('/face-recognition', methods=['POST'])  # Route corrected here
+@app.route('/face-recognition', methods=['POST'])  # Make sure this route matches your client
 def authenticate_face():
     try:
         data = request.get_json()
@@ -49,13 +49,19 @@ def authenticate_face():
             return jsonify({'status': 'error', 'message': 'No frame data received'}), 400
 
         frame_data = data['frame']
-        img_bytes = base64.b64decode(frame_data)
-        np_arr = np.frombuffer(img_bytes, np.uint8)
-        frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+
+        # Try to decode Base64 image
+        try:
+            img_bytes = base64.b64decode(frame_data)
+            np_arr = np.frombuffer(img_bytes, np.uint8)
+            frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+        except Exception as decode_err:
+            return jsonify({'status': 'error', 'message': f'Base64 decode error: {decode_err}'}), 400
 
         if frame is None:
-            return jsonify({'status': 'error', 'message': 'Failed to decode image'}), 400
+            return jsonify({'status': 'error', 'message': 'Failed to decode image (frame is None)'}), 400
 
+        # Proceed with recognition
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -96,5 +102,5 @@ def authenticate_face():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
-    print("🚀 Face Recognition API Server is running on http://0.0.0.0:5000/face-recognition")
+    print("🚀 Face Recognition API Server is running at http://0.0.0.0:5000/face-recognition")
     app.run(host='0.0.0.0', port=5000)
