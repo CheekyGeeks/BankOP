@@ -3,6 +3,7 @@ import { Box, Container, Typography, TextField, Button, Paper, InputAdornment, L
 import { useNavigate } from 'react-router-dom';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import FaceIcon from '@mui/icons-material/Face';
 
 const SignInPage = () => {
   const navigate = useNavigate();
@@ -51,11 +52,12 @@ const SignInPage = () => {
       localStorage.setItem('userData', JSON.stringify(mockData.user));
       setNotification({
         open: true,
-        message: 'Authentication successful!',
+        message: 'Token authentication successful! Proceeding to face verification...',
         severity: 'success'
       });
       setTimeout(() => {
-        navigate('/dashboard');
+        // Navigate to face authentication instead of dashboard
+        navigate('/face-auth', { state: { user: mockData.user } });
       }, 1000);
     } catch (err) {
       setError('Authentication failed. Please try again.');
@@ -109,6 +111,36 @@ const SignInPage = () => {
 
   const handleSignUpClick = () => {
     navigate('/signup');
+  };
+
+  const handleContinueWithAuth = () => {
+    if (!isFormValid) {
+      setNotification({
+        open: true,
+        message: 'Please enter valid token first',
+        severity: 'warning'
+      });
+      return;
+    }
+    
+    setLoading(true);
+    
+    // Simulate token authentication
+    setTimeout(() => {
+      const mockData = {
+        token: 'mock-auth-token-123456',
+        user: {
+          id: customerId,
+          name: 'Test User'
+        }
+      };
+      localStorage.setItem('authToken', mockData.token);
+      localStorage.setItem('userData', JSON.stringify(mockData.user));
+      
+      // Navigate to face authentication
+      navigate('/face-auth', { state: { user: mockData.user } });
+      setLoading(false);
+    }, 1500);
   };
 
   return (
@@ -165,40 +197,43 @@ const SignInPage = () => {
                     Didn't receive a Token?
                   </Link>
                 </Box>
+
+                {/* Continue with Face Authentication Button */}
+                <Button 
+                  onClick={handleContinueWithAuth}
+                  fullWidth 
+                  variant="contained" 
+                  disabled={!token.trim() || loading} 
+                  startIcon={<FaceIcon />}
+                  sx={{ 
+                    py: 1.5, 
+                    mb: 3,
+                    borderRadius: 2, 
+                    background: 'linear-gradient(90deg, #7B68EE 0%, #9370DB 100%)', 
+                    fontWeight: 600, 
+                    boxShadow: '0 4px 12px rgba(123, 104, 238, 0.3)', 
+                    transition: 'all 0.3s ease', 
+                    '&:hover': { 
+                      boxShadow: '0 6px 15px rgba(123, 104, 238, 0.5)', 
+                      transform: 'translateY(-2px)' 
+                    }, 
+                    '&.Mui-disabled': { 
+                      background: 'rgba(123, 104, 238, 0.4)', 
+                      color: 'rgba(255, 255, 255, 0.7)' 
+                    } 
+                  }}
+                >
+                  {loading ? <CircularProgress size={24} color="inherit" /> : 'Continue with Face Verification'}
+                </Button>
               </>
             )}
             
             <Button 
               onClick={handleSignUpClick}
               variant="text" 
-              sx={{ width: '100%', py: 1.5, mb: 2, fontWeight: 600, color: '#A288E3', '&:hover': { backgroundColor: 'rgba(162, 136, 227, 0.1)' } }}
+              sx={{ width: '100%', py: 1.5, fontWeight: 600, color: '#A288E3', '&:hover': { backgroundColor: 'rgba(162, 136, 227, 0.1)' } }}
             >
               Don't have an account? Sign up
-            </Button>
-            
-            <Button 
-              type="submit" 
-              fullWidth 
-              variant="contained" 
-              disabled={!isFormValid || loading} 
-              sx={{ 
-                py: 1.5, 
-                borderRadius: 2, 
-                background: 'linear-gradient(90deg, #7B68EE 0%, #9370DB 100%)', 
-                fontWeight: 600, 
-                boxShadow: '0 4px 12px rgba(123, 104, 238, 0.3)', 
-                transition: 'all 0.3s ease', 
-                '&:hover': { 
-                  boxShadow: '0 6px 15px rgba(123, 104, 238, 0.5)', 
-                  transform: 'translateY(-2px)' 
-                }, 
-                '&.Mui-disabled': { 
-                  background: 'rgba(123, 104, 238, 0.4)', 
-                  color: 'rgba(255, 255, 255, 0.7)' 
-                } 
-              }}
-            >
-              {loading ? <CircularProgress size={24} color="inherit" /> : tokenRequested ? 'Continue' : 'Request Token'}
             </Button>
           </Box>
         </Paper>
