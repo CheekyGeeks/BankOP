@@ -5,7 +5,7 @@ import time
 import json
 
 # === Configuration ===
-SERVER_URL = "http://<192.168.1.6>:5000/verify"  # Replace <SERVER_IP> with your actual server's IP address
+SERVER_URL = "http://192.168.1.6:5000/face-recognition"  # Replace with your actual server IP address
 SEND_INTERVAL = 0.5  # Time between sending frames (in seconds)
 
 def encode_frame(frame):
