@@ -41,21 +41,21 @@ predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
 LEFT_EYE_IDX = list(range(36, 42))
 RIGHT_EYE_IDX = list(range(42, 48))
 
-@app.route('/authenticate', methods=['POST'])
+@app.route('/face-recognition', methods=['POST'])  # Route corrected here
 def authenticate_face():
     try:
         data = request.get_json()
-        frame_data = data.get('frame')
+        if not data or 'frame' not in data:
+            return jsonify({'status': 'error', 'message': 'No frame data received'}), 400
 
-        if not frame_data:
-            return jsonify({'status': 'error', 'message': 'No frame received'}), 400
-
-        # Decode Base64 image
+        frame_data = data['frame']
         img_bytes = base64.b64decode(frame_data)
         np_arr = np.frombuffer(img_bytes, np.uint8)
         frame = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
 
-        # Preprocess
+        if frame is None:
+            return jsonify({'status': 'error', 'message': 'Failed to decode image'}), 400
+
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -93,7 +93,8 @@ def authenticate_face():
             return jsonify({'status': 'fail', 'reason': 'Face mismatch or no blink detected'})
 
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
+    print("🚀 Face Recognition API Server is running on http://0.0.0.0:5000/face-recognition")
     app.run(host='0.0.0.0', port=5000)
