@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import SignInPage from './pages/SignIn';
 import Dashboard from './pages/Dashboard';
+import FaceAuthentication from './pages/FacereAuthentication';
 
 const theme = createTheme({
   palette: {
@@ -67,8 +68,8 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/face-auth" element={<FaceAuthentication />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
           <Footer />
         </div>

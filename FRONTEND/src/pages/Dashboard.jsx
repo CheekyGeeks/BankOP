@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Container, Typography, Button, Paper, Grid, Avatar, IconButton, Badge, Chip, Card, CardContent } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { styled } from '@mui/material/styles';
 import PaymentsIcon from '@mui/icons-material/Payments';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import SettingsIcon from '@mui/icons-material/Settings';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SortIcon from '@mui/icons-material/Sort';
@@ -14,8 +14,8 @@ import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
+import { useNavigate } from 'react-router-dom';
 
-// Style constants
 const COLORS = {
   primary: '#6B63FB',
   primaryHover: '#5A52E0',
@@ -81,98 +81,12 @@ const StyledChip = ({ label, isActive = false, color = COLORS.textSecondary, ...
   />
 );
 
-const ContactItem = ({ contact }) => (
-  <Box 
-    sx={{ 
-      p: 1.5, 
-      bgcolor: COLORS.secondaryBg, 
-      borderRadius: 3,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      transition: 'all 0.2s ease',
-      '&:hover': {
-        bgcolor: `rgba(36, 40, 71, 0.8)`,
-        transform: 'translateX(4px)'
-      }
-    }}
-  >
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      <Avatar sx={{ 
-        bgcolor: contact.id % 2 === 0 ? COLORS.primary : COLORS.primaryHover, 
-        color: COLORS.textPrimary, 
-        mr: 2,
-        width: 32,
-        height: 32,
-        fontSize: '0.8rem',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
-      }}>
-        {contact.initial}
-      </Avatar>
-      <Typography variant="body2" fontFamily="'Inter', 'Segoe UI', Roboto, sans-serif" fontWeight={500}>{contact.name}</Typography>
-    </Box>
-    <IconButton size="small" sx={{ bgcolor: 'rgba(107, 99, 251, 0.1)', '&:hover': { bgcolor: 'rgba(107, 99, 251, 0.2)' } }}>
-      <PaymentsIcon sx={{ color: COLORS.primary, fontSize: '1.1rem' }} />
-    </IconButton>
-  </Box>
-);
-
-const StatusChip = ({ status }) => {
-  let color = COLORS.success;
-  let bgcolor = 'rgba(76, 175, 80, 0.2)';
-  let label = 'Done';
-
-  if (status === 'pending') {
-    color = COLORS.warning;
-    bgcolor = 'rgba(255, 215, 0, 0.2)';
-    label = 'Pending';
-  }
-
-  return (
-    <Chip 
-      label={label}
-      size="small"
-      sx={{
-        color,
-        bgcolor,
-        fontSize: '0.7rem',
-        height: '24px',
-        fontWeight: 600,
-        borderRadius: 10,
-        fontFamily: "'Inter', 'Segoe UI', Roboto, sans-serif",
-      }}
-    />
-  );
-};
-
-// Transaction icon selector
-const getTransactionIcon = (category) => {
-  switch (category.toLowerCase()) {
-    case 'shopping':
-      return <ShoppingBasketIcon sx={{ color: COLORS.primary, fontSize: '1.2rem' }} />;
-    case 'grocery':
-      return <LocalGroceryStoreIcon sx={{ color: '#4CAF50', fontSize: '1.2rem' }} />;
-    case 'laundry':
-      return <LocalLaundryServiceIcon sx={{ color: '#29B6F6', fontSize: '1.2rem' }} />;
-    case 'car repair':
-      return <DirectionsCarIcon sx={{ color: '#FFA726', fontSize: '1.2rem' }} />;
-    default:
-      return <PaymentsIcon sx={{ color: COLORS.primary, fontSize: '1.2rem' }} />;
-  }
-};
-
-// Payroll history data
-const payrollHistory = [
-  { id: 1, date: "Mar 01, 2024", amount: 28500, recipients: 12 },
-  { id: 2, date: "Feb 01, 2024", amount: 27800, recipients: 12 },
-  { id: 3, date: "Jan 01, 2024", amount: 27800, recipients: 12 }
-];
-
 // Dashboard Component
 const Dashboard = () => {
   const currentDate = new Date();
   const hours = currentDate.getHours();
   const userName = "Sarah Moller";
+  const navigate = useNavigate();
   
   // Greeting based on time of day
   let greeting = "Good morning";
@@ -181,6 +95,11 @@ const Dashboard = () => {
   } else if (hours >= 17) {
     greeting = "Good evening";
   }
+  
+  // Function to handle sign out
+  const handleSignOut = () => {
+    navigate('/'); 
+  };
   
   // Contacts
   const contacts = [
@@ -207,6 +126,94 @@ const Dashboard = () => {
     { id: 4, category: "Car Repair", date: "Jun 23, 2021", time: "08:20 pm", amount: 100 }
   ];
   
+  // Payroll history data
+  const payrollHistory = [
+    { id: 1, date: "Mar 01, 2024", amount: 28500, recipients: 12 },
+    { id: 2, date: "Feb 01, 2024", amount: 27800, recipients: 12 },
+    { id: 3, date: "Jan 01, 2024", amount: 27800, recipients: 12 }
+  ];
+
+  // Transaction icon selector
+  const getTransactionIcon = (category) => {
+    switch (category.toLowerCase()) {
+      case 'shopping':
+        return <ShoppingBasketIcon sx={{ color: COLORS.primary, fontSize: '1.2rem' }} />;
+      case 'grocery':
+        return <LocalGroceryStoreIcon sx={{ color: '#4CAF50', fontSize: '1.2rem' }} />;
+      case 'laundry':
+        return <LocalLaundryServiceIcon sx={{ color: '#29B6F6', fontSize: '1.2rem' }} />;
+      case 'car repair':
+        return <DirectionsCarIcon sx={{ color: '#FFA726', fontSize: '1.2rem' }} />;
+      default:
+        return <PaymentsIcon sx={{ color: COLORS.primary, fontSize: '1.2rem' }} />;
+    }
+  };
+
+  // ContactItem component moved inside Dashboard to access handleSignOut
+  const ContactItem = ({ contact }) => (
+    <Box 
+      sx={{ 
+        p: 1.5, 
+        bgcolor: COLORS.secondaryBg, 
+        borderRadius: 3,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        transition: 'all 0.2s ease',
+        '&:hover': {
+          bgcolor: `rgba(36, 40, 71, 0.8)`,
+          transform: 'translateX(4px)'
+        }
+      }}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Avatar sx={{ 
+          bgcolor: contact.id % 2 === 0 ? COLORS.primary : COLORS.primaryHover, 
+          color: COLORS.textPrimary, 
+          mr: 2,
+          width: 32,
+          height: 32,
+          fontSize: '0.8rem',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)'
+        }}>
+          {contact.initial}
+        </Avatar>
+        <Typography variant="body2" fontFamily="'Inter', 'Segoe UI', Roboto, sans-serif" fontWeight={500}>{contact.name}</Typography>
+      </Box>
+      <IconButton size="small" sx={{ bgcolor: 'rgba(107, 99, 251, 0.1)', '&:hover': { bgcolor: 'rgba(107, 99, 251, 0.2)' } }} onClick={handleSignOut}>
+        <PaymentsIcon sx={{ color: COLORS.primary, fontSize: '1.1rem' }} />
+      </IconButton>
+    </Box>
+  );
+
+  const StatusChip = ({ status }) => {
+    let color = COLORS.success;
+    let bgcolor = 'rgba(76, 175, 80, 0.2)';
+    let label = 'Done';
+
+    if (status === 'pending') {
+      color = COLORS.warning;
+      bgcolor = 'rgba(255, 215, 0, 0.2)';
+      label = 'Pending';
+    }
+
+    return (
+      <Chip 
+        label={label}
+        size="small"
+        sx={{
+          color,
+          bgcolor,
+          fontSize: '0.7rem',
+          height: '24px',
+          fontWeight: 600,
+          borderRadius: 10,
+          fontFamily: "'Inter', 'Segoe UI', Roboto, sans-serif",
+        }}
+      />
+    );
+  };
+
   return (
     <Box sx={{ 
       minHeight: '100vh', 
@@ -255,8 +262,8 @@ const Dashboard = () => {
               <Typography variant="body2" sx={{ mr: 1, fontWeight: 500, fontSize: '0.9rem' }}>{userName}</Typography>
               <Avatar sx={{ width: 32, height: 32, bgcolor: 'rgba(255, 255, 255, 0.2)', fontSize: '0.8rem', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)' }}>SM</Avatar>
             </Box>
-            <IconButton size="small" sx={{ ml: 1, bgcolor: 'rgba(255, 255, 255, 0.15)', '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.25)' } }}>
-              <SettingsIcon sx={{ color: 'white', fontSize: '1.1rem' }} />
+            <IconButton onClick={handleSignOut} size="small" sx={{ ml: 1, bgcolor: 'rgba(255, 255, 255, 0.15)', '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.25)' } }} >
+              <LogoutIcon sx={{ color: 'white', fontSize: '1.1rem' }} />
             </IconButton>
           </Box>
         </Box>
