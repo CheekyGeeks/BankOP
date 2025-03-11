@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Container, Typography, TextField, Button, Paper, InputAdornment, Link, Snackbar, Alert, CircularProgress } from '@mui/material';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
@@ -8,6 +8,7 @@ const SignInPage = () => {
   const navigate = useNavigate();
   const [customerId, setCustomerId] = useState('');
   const [token, setToken] = useState('');
+  const [tokenRequested, setTokenRequested] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [notification, setNotification] = useState({
@@ -16,7 +17,7 @@ const SignInPage = () => {
     severity: 'success'
   });
 
-  const isFormValid = customerId.trim() !== '' && token.trim() !== '';
+  const isFormValid = customerId.trim() !== '' && (tokenRequested ? token.trim() !== '' : true);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,6 +29,12 @@ const SignInPage = () => {
       });
       return;
     }
+    
+    if (!tokenRequested) {
+      handleGenerateToken();
+      return;
+    }
+    
     setLoading(true);
     setError('');
 
@@ -48,7 +55,6 @@ const SignInPage = () => {
         severity: 'success'
       });
       setTimeout(() => {
-        // Fixed: Use a string path instead of a JSX element
         navigate('/dashboard');
       }, 1000);
     } catch (err) {
@@ -68,6 +74,23 @@ const SignInPage = () => {
     setNotification({ ...notification, open: false });
   };
 
+  const handleGenerateToken = () => {
+    if (!customerId) {
+      setNotification({
+        open: true,
+        message: 'Please enter your Customer ID first',
+        severity: 'warning'
+      });
+      return;
+    }
+    setTokenRequested(true);
+    setNotification({
+      open: true,
+      message: 'Token generation request submitted. Check your email.',
+      severity: 'info'
+    });
+  };
+
   const handleTokenRequest = () => {
     if (!customerId) {
       setNotification({
@@ -84,7 +107,6 @@ const SignInPage = () => {
     });
   };
 
-  // Added a function to handle signup navigation
   const handleSignUpClick = () => {
     navigate('/signup');
   };
@@ -98,12 +120,54 @@ const SignInPage = () => {
           
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <TextField fullWidth placeholder="Enter your Customer ID" variant="outlined" value={customerId} onChange={(e) => setCustomerId(e.target.value)} InputProps={{ startAdornment: (<InputAdornment position="start"><PersonOutlineOutlinedIcon sx={{ color: '#7B68EE' }} /></InputAdornment>) }} required sx={{ mb: 3, backgroundColor: '#242847', color: '#ffffff' }} />
-            <TextField fullWidth placeholder="Enter your Token" variant="outlined" type="password" value={token} onChange={(e) => setToken(e.target.value)} InputProps={{ startAdornment: (<InputAdornment position="start"><LockOutlinedIcon sx={{ color: '#7B68EE' }} /></InputAdornment>) }} required sx={{ mb: 3, backgroundColor: '#242847', color: '#ffffff' }} />
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
-              <Link component="button" variant="body2" onClick={handleTokenRequest} sx={{ color: '#A288E3', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>Didn't receive a Token?</Link>
-            </Box>
             
-            {/* Fixed: Changed to use onClick handler instead of RouterLink for consistency */}
+            {!tokenRequested ? (
+              <Button 
+                onClick={handleGenerateToken}
+                variant="outlined" 
+                fullWidth
+                sx={{ 
+                  py: 1.5, 
+                  mb: 3, 
+                  borderRadius: 2,
+                  borderColor: '#7B68EE',
+                  color: '#A288E3',
+                  '&:hover': { 
+                    borderColor: '#9370DB',
+                    backgroundColor: 'rgba(162, 136, 227, 0.1)' 
+                  }
+                }}
+              >
+                Generate Token
+              </Button>
+            ) : (
+              <>
+                <TextField 
+                  fullWidth 
+                  placeholder="Enter Token" 
+                  variant="outlined" 
+                  type="password" 
+                  value={token} 
+                  onChange={(e) => setToken(e.target.value)} 
+                  InputProps={{ 
+                    startAdornment: (<InputAdornment position="start"><LockOutlinedIcon sx={{ color: '#7B68EE' }} /></InputAdornment>) 
+                  }} 
+                  required 
+                  sx={{ mb: 3, backgroundColor: '#242847', color: '#ffffff' }} 
+                />
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
+                  <Link 
+                    component="button" 
+                    variant="body2" 
+                    onClick={handleTokenRequest} 
+                    sx={{ color: '#A288E3', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+                  >
+                    Didn't receive a Token?
+                  </Link>
+                </Box>
+              </>
+            )}
+            
             <Button 
               onClick={handleSignUpClick}
               variant="text" 
@@ -134,7 +198,7 @@ const SignInPage = () => {
                 } 
               }}
             >
-              {loading ? <CircularProgress size={24} color="inherit" /> : 'Continue'}
+              {loading ? <CircularProgress size={24} color="inherit" /> : tokenRequested ? 'Continue' : 'Request Token'}
             </Button>
           </Box>
         </Paper>
