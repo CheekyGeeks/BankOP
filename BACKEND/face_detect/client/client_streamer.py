@@ -5,7 +5,7 @@ import time
 import json
 
 # === Configuration ===
-SERVER_URL = "http://192.168.1.6:5000/face-recognition"
+SERVER_URL = "http://192.168.1.5/face-recognition"
   # Replace with your actual server IP address
 SEND_INTERVAL = 0.5  # Time between sending frames (in seconds)
 
@@ -58,3 +58,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# pyinstaller --onefile client_streamer.py
