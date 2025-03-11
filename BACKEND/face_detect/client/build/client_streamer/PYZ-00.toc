@@ -1,4 +1,4 @@
-('C:\\Users\\vikas\\OneDrive\\Desktop\\fintech_op\\BankOP\\BACKEND\\FACE_DETECT\\client\\build\\client_streamer\\PYZ-00.pyz',
+('C:\\Users\\vikas\\OneDrive\\Desktop\\fintech_op\\BankOP\\BACKEND\\face_detect\\client\\build\\client_streamer\\PYZ-00.pyz',
  [('__future__',
    'C:\\Users\\vikas\\AppData\\Local\\Programs\\Python\\Python37\\lib\\__future__.py',
    'PYMODULE'),
