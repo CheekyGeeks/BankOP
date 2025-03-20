@@ -1,0 +1,3 @@
+user= paynova
+database= paynova_db
+password= 1234
