@@ -1,0 +1,57 @@
+for register 
+curl -X POST   http://127.0.0.1:8000/api/register/   -H 'Content-Type: application/json'   -d '{
+    "email": "pillmill7700@gmail.com",
+    "full_name": "Test User",
+    "phone_number": "1234567890",
+    "aadhar_number": "123456789012",
+    "consumer_id": "CONS123456",
+    "bank_name": "Test Bank",
+    "card_number": "4111111111111111",
+    "card_expiry": "12/25"
+}'
+
+from django.core.mail import send_mail
+send_mail(
+    'Test Subject', 
+    'Test message body', 
+    'cheekygeeks3@gmail.com', 
+    ['gajendrapandey973@gmail.com'],  # Put your actual email here
+    fail_silently=False
+)
+
+login curl
+
+curl -X POST \
+  http://localhost:8000/api/login/ \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "consumer_id": "CONS123456",
+    "password": "[!2Vjw>EK;&'"
+  }'
+
+  curl -X POST http://localhost:8000/api/login/      -H 'Content-Type: application/json'      -d '{"consumer_id":"CONS123456","password":"rym^J-eyc83V"}'
+
+
+curl -X POST http://localhost:8000/api/login/ \
+     -H 'Content-Type: application/json' \
+     -d '{"consumer_id":"CONS123456","password":"0CNTtCTgiLx"}'
+
+
+
+
+
+# First, get an authentication token
+curl -X POST \
+  http://localhost:8000/api/login/ \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "consumer_id": "CONS123456",
+    "password": "0CNTtCTgiLx'"
+  }'
+
+# Then, use the token to test face verification
+curl -X POST \
+  http://localhost:8000/api/face-verification/ \
+  -H 'Authorization: Bearer YOUR_ACCESS_TOKEN' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'image=@/home/particle13/Desktop/Paynova/auth_project/test.png'
