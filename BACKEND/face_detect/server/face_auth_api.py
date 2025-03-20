@@ -102,5 +102,5 @@ def authenticate_face():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
-    print("🚀 Face Recognition API Server is running at http://0.0.0.0:5000/face-recognition")
+    print("🚀 Face Recognition API Server is running at http://0.0.0.0:80/face-recognition")
     app.run(host='0.0.0.0', port=5000)
