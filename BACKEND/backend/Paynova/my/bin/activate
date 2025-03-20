@@ -39,10 +39,10 @@ deactivate nondestructive
 if [ "${OSTYPE:-}" = "cygwin" ] || [ "${OSTYPE:-}" = "msys" ] ; then
     # transform D:\path\to\venv to /d/path/to/venv on MSYS
     # and to /cygdrive/d/path/to/venv on Cygwin
-    export VIRTUAL_ENV=$(cygpath '/home/particle13/Desktop/Paynova  (Copy)/my')
+    export VIRTUAL_ENV=$(cygpath /home/particle13/Desktop/paynova_main/BankOP/BACKEND/backend/Paynova/my)
 else
     # use the path as-is
-    export VIRTUAL_ENV='/home/particle13/Desktop/Paynova  (Copy)/my'
+    export VIRTUAL_ENV=/home/particle13/Desktop/paynova_main/BankOP/BACKEND/backend/Paynova/my
 fi
 
 _OLD_VIRTUAL_PATH="$PATH"

@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/home/particle13/Desktop/Paynova  (Copy)/my/bin/python3" "$0" "$@"
-' '''
+#!/home/particle13/Desktop/paynova_main/BankOP/BACKEND/backend/Paynova/my/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

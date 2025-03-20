@@ -2,6 +2,9 @@ import datetime
 import logging
 import random
 import string
+import os
+from django.http import HttpResponse, FileResponse
+from django.conf import settings
 from django.core.mail import send_mail
 from django.conf import settings
 from django.utils import timezone
@@ -27,6 +30,35 @@ logger = logging.getLogger(__name__)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
+def download_required_software(request):
+    """
+    Endpoint to download the required software package
+    """
+    try:
+        # Path to your software file in your project
+        # You should store this file in a secure location, like MEDIA_ROOT
+        file_path = os.path.join(settings.MEDIA_ROOT, 'software', 'required_software.zip')
+        
+        if os.path.exists(file_path):
+            response = FileResponse(
+                open(file_path, 'rb'),
+                content_type='application/zip'
+            )
+            response['Content-Disposition'] = 'attachment; filename="payflow_required_software.zip"'
+            return response
+        else:
+            logger.error("Software file not found at path: %s", file_path)
+            return Response({
+                "success": False,
+                "message": "Software file not found"
+            }, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        logger.error(f"Failed to serve software download: {str(e)}")
+        return Response({
+            "success": False,
+            "message": "Failed to process download request"
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 def api_root(request):
     return Response({
         "message": "API is running",
@@ -44,6 +76,18 @@ class UserRegistrationView(APIView):
     permission_classes = [AllowAny]
     
     def post(self, request):
+        # Add logging for debugging
+        logger.info(f"Registration request data: {request.data}")
+        
+        # Check if software is installed
+        software_installed = request.data.get('software_installed', False)
+        if not software_installed:
+            return Response({
+                "success": False,
+                "message": "You must download and install the required software to proceed",
+                "errors": {"software_installed": ["Required software must be installed"]}
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
         serializer = UserRegistrationSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
@@ -58,9 +102,17 @@ class UserRegistrationView(APIView):
             # Send verification email with password
             self.send_verification_email(user)
             
+            # Generate a temporary token for face verification step
+            token = ''.join(random.choices(string.ascii_letters + string.digits, k=32))
+            user.face_verification_token = token
+            user.face_verification_expires = timezone.now() + datetime.timedelta(hours=1)
+            user.save()
+            
             return Response({
                 "success": True,
-                "message": "User registered successfully. Check your email for verification link and password."
+                "message": "User registered successfully. Proceed to face verification.",
+                "face_verification_token": token,
+                "consumer_id": user.consumer_id
             }, status=status.HTTP_201_CREATED)
         
         return Response({
@@ -68,7 +120,7 @@ class UserRegistrationView(APIView):
             "errors": serializer.errors
         }, status=status.HTTP_400_BAD_REQUEST)
     
-   
+     
     def send_verification_email(self, user):
         try:
             # Create verification token
@@ -412,3 +464,100 @@ def verify_email(request, token):
             "success": False,
             "message": "Invalid or expired verification token."
         }, status=status.HTTP_400_BAD_REQUEST)
+    
+class CompleteRegistrationWithFaceView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        # Get token and consumer_id from request
+        token = request.data.get('face_verification_token')
+        consumer_id = request.data.get('consumer_id')
+        face_image = request.data.get('face_image')
+        
+        if not token or not consumer_id or not face_image:
+            return Response({
+                "success": False,
+                "message": "Missing required information",
+                "errors": {
+                    "token": ["Required if token is missing"],
+                    "consumer_id": ["Required if consumer_id is missing"],
+                    "face_image": ["Required if face_image is missing"]
+                }
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            # Find user with this token and consumer_id
+            user = User.objects.get(
+                consumer_id=consumer_id,
+                face_verification_token=token,
+                face_verification_expires__gt=timezone.now()
+            )
+            
+            # Process the face image
+            self.save_face_image(face_image, user)
+            
+            # Clear the verification token
+            user.face_verification_token = None
+            user.face_verification_expires = None
+            user.is_face_verified = True  # In a real app, this would be done after actual verification
+            user.save()
+            
+            return Response({
+                "success": True,
+                "message": "Face verification completed successfully. You can now log in.",
+                "redirect_to": "/login"  # Front-end can use this to redirect
+            }, status=status.HTTP_200_OK)
+            
+        except User.DoesNotExist:
+            return Response({
+                "success": False,
+                "message": "Invalid or expired verification token."
+            }, status=status.HTTP_400_BAD_REQUEST)
+    
+    def save_face_image(self, image_data, user):
+        """
+        Saves the face image with the consumer_id as the filename
+        """
+        try:
+            # Handle base64 encoded image
+            if isinstance(image_data, str) and image_data.startswith('data:image'):
+                # Extract the base64 part
+                format, imgstr = image_data.split(';base64,')
+                ext = format.split('/')[-1]
+                
+                # Decode the base64 string
+                import base64
+                from django.core.files.base import ContentFile
+                
+                # Create the file with consumer_id as the name
+                filename = f"{user.consumer_id}.{ext}"
+                image_content = ContentFile(base64.b64decode(imgstr), name=filename)
+                
+                # Create a FaceVerification record
+                face_verification = FaceVerification.objects.create(
+                    user=user,
+                    is_verified=True  # In a real app, this would be set after verification
+                )
+                
+                # Save the image to the face_verification model
+                face_verification.image.save(filename, image_content)
+                face_verification.save()
+            else:
+                # If it's a file upload
+                filename = f"{user.consumer_id}.{image_data.name.split('.')[-1]}"
+                
+                # Create a FaceVerification record
+                face_verification = FaceVerification.objects.create(
+                    user=user,
+                    is_verified=True  # In a real app, this would be set after verification
+                )
+                
+                # Save the image
+                face_verification.image.save(filename, image_data)
+                face_verification.save()
+                
+            logger.info(f"Face image saved successfully for user {user.consumer_id}")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to save face image: {str(e)}")
+            return False

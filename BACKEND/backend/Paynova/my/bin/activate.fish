@@ -33,7 +33,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV '/home/particle13/Desktop/Paynova  (Copy)/my'
+set -gx VIRTUAL_ENV /home/particle13/Desktop/paynova_main/BankOP/BACKEND/backend/Paynova/my
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/"bin $PATH

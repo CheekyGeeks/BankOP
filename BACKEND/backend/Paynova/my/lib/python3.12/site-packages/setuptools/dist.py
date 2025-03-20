@@ -12,7 +12,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Union
 
 from more_itertools import partition, unique_everseen
-from packaging.licenses import canonicalize_license_expression
 from packaging.markers import InvalidMarker, Marker
 from packaging.specifiers import InvalidSpecifier, SpecifierSet
 from packaging.version import Version
@@ -24,6 +23,7 @@ from . import (
     command as _,  # noqa: F401 # imported for side-effects
 )
 from ._importlib import metadata
+from ._normalization import _canonicalize_license_expression
 from ._path import StrPath
 from ._reqs import _StrOrIter
 from .config import pyprojecttoml, setupcfg
@@ -423,7 +423,7 @@ class Distribution(_Distribution):
         license_expr = self.metadata.license_expression
         if license_expr:
             str_ = _static.Str if _static.is_static(license_expr) else str
-            normalized = str_(canonicalize_license_expression(license_expr))
+            normalized = str_(_canonicalize_license_expression(license_expr))
             if license_expr != normalized:
                 InformationOnly.emit(f"Normalizing '{license_expr}' to '{normalized}'")
                 self.metadata.license_expression = normalized
@@ -496,26 +496,35 @@ class Distribution(_Distribution):
         >>> Distribution._find_pattern("../LICENSE.MIT")
         Traceback (most recent call last):
         ...
-        setuptools.errors.InvalidConfigError: ...Pattern '../LICENSE.MIT' cannot contain '..'
+        setuptools.warnings.SetuptoolsDeprecationWarning: ...Pattern '../LICENSE.MIT' cannot contain '..'...
         >>> Distribution._find_pattern("LICEN{CSE*")
         Traceback (most recent call last):
         ...
         setuptools.warnings.SetuptoolsDeprecationWarning: ...Pattern 'LICEN{CSE*' contains invalid characters...
         """
+        pypa_guides = "specifications/glob-patterns/"
         if ".." in pattern:
-            raise InvalidConfigError(f"Pattern {pattern!r} cannot contain '..'")
+            SetuptoolsDeprecationWarning.emit(
+                f"Pattern {pattern!r} cannot contain '..'",
+                """
+                Please ensure the files specified are contained by the root
+                of the Python package (normally marked by `pyproject.toml`).
+                """,
+                see_url=f"https://packaging.python.org/en/latest/{pypa_guides}",
+                due_date=(2026, 3, 20),  # Introduced in 2025-03-20
+                # Replace with InvalidConfigError after deprecation
+            )
         if pattern.startswith((os.sep, "/")) or ":\\" in pattern:
             raise InvalidConfigError(
                 f"Pattern {pattern!r} should be relative and must not start with '/'"
             )
         if re.match(r'^[\w\-\.\/\*\?\[\]]+$', pattern) is None:
-            pypa_guides = "specifications/glob-patterns/"
             SetuptoolsDeprecationWarning.emit(
                 "Please provide a valid glob pattern.",
                 "Pattern {pattern!r} contains invalid characters.",
                 pattern=pattern,
                 see_url=f"https://packaging.python.org/en/latest/{pypa_guides}",
-                due_date=(2026, 2, 20),  # Introduced in 2025-02-20
+                due_date=(2026, 3, 20),  # Introduced in 2025-02-20
             )
 
         found = glob(pattern, recursive=True)
@@ -525,7 +534,7 @@ class Distribution(_Distribution):
                 "Cannot find any files for the given pattern.",
                 "Pattern {pattern!r} did not match any files.",
                 pattern=pattern,
-                due_date=(2026, 2, 20),  # Introduced in 2025-02-20
+                due_date=(2026, 3, 20),  # Introduced in 2025-02-20
                 # PEP 639 requires us to error, but as a transition period
                 # we will only issue a warning to give people time to prepare.
                 # After the transition, this should raise an InvalidConfigError.
