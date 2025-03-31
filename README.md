@@ -25,42 +25,29 @@ With increasing risks of digital fraud and inefficiencies in financial operation
 To ensure proper functionality, the following dependencies are required:
 
 ## Tech Stacks used
-#### FRONTEND
-- Vite
-- React
-- Tailwind CSS
-#### BACKEND
-- Django
-- Django Restful
-- OpenCV
-#### DATABASE
-- SqlLite
+# Dependencies
 
-### Backend Dependencies:
-- Django==4.2.7
-- djangorestframework==3.14.0
-- djangorestframework-simplejwt==5.3.0
-- django-cors-headers==4.3.0
-- Pillow==10.1.0
-- python-decouple==3.8
-- psycopg2-binary==2.9.9
-- djoser==2.2.0
-- opencv-python==4.8.1.78
-- setuptools
+| **Frontend**     | **Backend**       | **Database**  |
+|-------------------|-------------------|---------------|
+| Vite             | Django            | PostgreSQL    |
+| React            | Django Restful    |               |
+| Tailwind CSS     | OpenCV            |               |
 
-### Frontend Dependencies:
-- @emotion/react: ^11.14.0
-- @emotion/styled: ^11.14.0
-- @mui/icons-material: ^6.4.7
-- @mui/material: ^6.4.7
-- @tailwindcss/vite: ^4.0.12
-- framer-motion: ^12.4.10
-- react: ^19.0.0
-- react-dom: ^19.0.0
-- react-fast-marquee: ^1.6.5
-- react-router-dom: ^7.3.0
-- tailwindcss: ^4.0.12
----
+# Dependencies
+
+| **Frontend Dependencies**      | **Backend Dependencies**                   |
+|--------------------------------|--------------------------------------------|
+| emotion/react: ^11.14.0       | Django==4.2.7                              |
+| emotion/styled: ^11.14.0      | djangorestframework==3.14.0                |
+| mui/icons-material: ^6.4.7    | djangorestframework-simplejwt==5.3.0       |
+| mui/material: ^6.4.7          | django-cors-headers==4.3.0                 |
+| tailwindcss/vite: ^4.0.12     | Pillow==10.1.0                             |
+| framer-motion: ^12.4.10       | python-decouple==3.8                       |
+| react: ^19.0.0                | psycopg2-binary==2.9.9                     |
+| react-dom: ^19.0.0            | djoser==2.2.0                              |
+| react-fast-marquee: ^1.6.5    | opencv-python==4.8.1.78                    |
+| react-router-dom: ^7.3.0      | setuptools                                 |
+| tailwindcss: ^4.0.12          |                                            |
 
 ## Setup Instructions
 ### Step 1: Install Dependencies
