@@ -73,23 +73,19 @@ security.</li>
 
 ### License
 
-This project is released under the MIT License, allowing others to use, modify, and distribute the software under specified conditions.
+This project is released under the <b>MIT License</b> , allowing others to use, modify, and distribute the software under specified conditions.
 
 ### Contribution Guidelines
 
 Contributions are welcome! To contribute:
 
 Fork the repository.
-
 Create a new branch ```sh(feature-branch)```.
-
 Commit your changes.
-
 Submit a pull request.
-
 Ensure code quality and write tests for added features before submission.
 
-##TEAM (CHEEKY GEEKS)
+## TEAM (CHEEKY GEEKS)
 <h4>Abhishek Saxena</h4>
 <h4>Gajendra Pandey</h4>
 <h4>Arpan Bhowmick</h4>
