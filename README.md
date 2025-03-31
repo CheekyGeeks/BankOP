@@ -59,7 +59,7 @@ Since npm run react command is depreciated in recent React update. So vite build
 ```sh
 npm run dev
 ```
-###Future Scope
+### Future Scope
 <ul>
  <li>Can be integrated with banking/payment systems for secure transactions.</li>
 <li>Scalable to cloud and edge devices for real-time authentication.</li>
