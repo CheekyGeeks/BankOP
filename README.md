@@ -103,8 +103,11 @@ Submit a pull request.
 Ensure code quality and write tests for added features before submission.
 
 ## TEAM (CHEEKY GEEKS)
-<h4>Abhishek Saxena</h4>
-<h4>Gajendra Pandey</h4>
-<h4>Arpan Bhowmick</h4>
-<h4>Shivam</h4>
-<h4>Vikas Kumar</h4>
+| **Serial No.** | **Name**          | **Role**                                   |
+|----------------|-------------------|-------------------------------------------|
+| 1              | Abhishek Saxena   | Frontend & Documentation                  |
+| 2              | Gajendra Pandey   | Backend & Token Creation                  |
+| 3              | Arpan Bhowmick    | Designing & Frontend                      |
+| 4              | Shivam            | Backend & Integration                     |
+| 5              | Vikas Kumar       | Security Measures (Face Detection and Anomaly Detection) |
+
