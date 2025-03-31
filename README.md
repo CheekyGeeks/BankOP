@@ -25,7 +25,6 @@ With increasing risks of digital fraud and inefficiencies in financial operation
 To ensure proper functionality, the following dependencies are required:
 
 ## Tech Stacks used
-# Dependencies
 
 | **Frontend**     | **Backend**       | **Database**  |
 |-------------------|-------------------|---------------|
@@ -33,8 +32,7 @@ To ensure proper functionality, the following dependencies are required:
 | React            | Django Restful    |               |
 | Tailwind CSS     | OpenCV            |               |
 
-# Dependencies
-
+## Tech Stacks with Dependency Version
 | **Frontend Dependencies**      | **Backend Dependencies**                   |
 |--------------------------------|--------------------------------------------|
 | emotion/react: ^11.14.0       | Django==4.2.7                              |
