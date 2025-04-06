@@ -102,6 +102,18 @@ Commit your changes.
 Submit a pull request.
 Ensure code quality and write tests for added features before submission.
 
+### Screenshots
+![Screenshot 2025-03-11 150547](https://github.com/user-attachments/assets/24c558a7-48f2-4c27-90d0-088dec5ed39f)
+
+![Screenshot 2025-03-11 150707](https://github.com/user-attachments/assets/ef2c420a-0175-4ba3-aa51-317ae72a85a3)
+
+![Screenshot 2025-03-11 151124](https://github.com/user-attachments/assets/c8b74752-ab16-4471-9199-bb27cd110f28)
+
+![Screenshot 2025-03-11 151230](https://github.com/user-attachments/assets/b1aeaf21-f7b8-461e-a32e-8e3d27d9a7e1)
+
+![Screenshot 2025-03-11 151658](https://github.com/user-attachments/assets/98d002d0-3203-47df-bf9e-74fdc23d9c85)
+
+
 ## TEAM (CHEEKY GEEKS)
 | **Serial No.** | **Name**          | **Role**                                   |
 |----------------|-------------------|-------------------------------------------|
