@@ -62,9 +62,9 @@ WSGI_APPLICATION = 'auth_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'paynova_db',
+        'NAME': 'paynova',
         'USER': 'paynova',
-        'PASSWORD': '1234',
+        'PASSWORD': 'paynova1234',
         'HOST': 'localhost',
         'PORT': '5432',
     }
