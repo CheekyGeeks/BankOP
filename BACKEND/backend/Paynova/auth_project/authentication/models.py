@@ -54,12 +54,20 @@ class User(AbstractUser):
     bank_name = models.CharField(max_length=100, blank=True, null=True)
     card_number = models.CharField(max_length=16, blank=True, null=True)
     card_expiry = models.CharField(max_length=7, blank=True, null=True)
+    cvv = models.CharField(max_length=3, blank=True, null=True)
     temp_password = models.CharField(max_length=100, blank=True, null=True)
     is_email_verified = models.BooleanField(default=False)
     is_face_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    face_verification_token = models.CharField(max_length=64, null=True, blank=True)
+    face_verification_expires = models.DateTimeField(null=True, blank=True)
     
+   
+    
+    
+
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['full_name']
     

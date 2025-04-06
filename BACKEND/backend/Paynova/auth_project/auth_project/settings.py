@@ -2,6 +2,14 @@ import os
 from datetime import timedelta
 from pathlib import Path
 from decouple import config
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Add these settings or modify existing ones
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Create directories for software storage
+os.makedirs(os.path.join(MEDIA_ROOT, 'software'), exist_ok=True)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
