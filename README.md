@@ -111,6 +111,8 @@ Ensure code quality and write tests for added features before submission.
 
 ![Screenshot 2025-03-11 151230](https://github.com/user-attachments/assets/b1aeaf21-f7b8-461e-a32e-8e3d27d9a7e1)
 
+![Screenshot 2025-03-11 151602](https://github.com/user-attachments/assets/8799714d-cdbb-4bea-8f22-fcdd86d53277)
+
 ![Screenshot 2025-03-11 151658](https://github.com/user-attachments/assets/98d002d0-3203-47df-bf9e-74fdc23d9c85)
 
 
