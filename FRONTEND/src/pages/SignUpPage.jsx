@@ -326,7 +326,7 @@ const SignUpPage = () => {
                         fontWeight: 600 
                       }}
                     >
-                      Consumer ID
+                      Customer ID
                     </Typography>
                     <TextField
                       fullWidth

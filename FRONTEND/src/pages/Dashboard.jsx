@@ -85,7 +85,7 @@ const StyledChip = ({ label, isActive = false, color = COLORS.textSecondary, ...
 const Dashboard = () => {
   const currentDate = new Date();
   const hours = currentDate.getHours();
-  const userName = "Sarah Moller";
+  const userName = "Abhishek";
   const navigate = useNavigate();
   
   // Greeting based on time of day
@@ -103,7 +103,7 @@ const Dashboard = () => {
   
   // Contacts
   const contacts = [
-    { id: 1, name: "Alex Johnson", initial: "A" },
+    { id: 1, name: "Alice Anderson", initial: "A" },
     { id: 2, name: "Maria Garcia", initial: "M" },
     { id: 3, name: "David Chen", initial: "D" },
     { id: 4, name: "Sophie Kim", initial: "S" },
