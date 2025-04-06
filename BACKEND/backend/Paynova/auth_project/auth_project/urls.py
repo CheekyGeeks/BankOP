@@ -9,6 +9,9 @@ urlpatterns = [
     path('api/', api_root, name='api-root'),  # Add this line
     path('admin/', admin.site.urls),
     path('api/', include('authentication.urls')),
+    path('faceauth/', include('faceauth.urls')),
+    path('anomaly/', include('anomaly.urls'))
+
 ]
 
 if settings.DEBUG:
